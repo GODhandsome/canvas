@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Document</title>
+</head>
+<body style="background:#f7fafc;">
+  <canvas id="bg" width="1200px" height="800px;"></canvas>
+
+  <script>
+    var c = document.getElementById('bg'),
+        width = +c.clientWidth,
+        height = +c.clientHeight,
+        ctx = c.getContext('2d'),
+        M = Math,
+        MR = M.random,
+        MP = M.pow,
+        balls = [];
+
+    ctx.fillStyle = "#ff0000";
+    ctx.strokeStyle = "rgba(0, 0, 0, 0.1)";
+    ctx.lineWidth = 0.5;
+
+    function initBalls() {
+      for(var i = 0; i < 20; i++) {
+        balls.push({
+          x: MR() * width,
+          y: MR() * height,
+          r: MR() * 10 + 5,
+          sx: MR() - 0.5,
+          sy: MR() - 0.5
+        });
+      }
+    }
+
+    function draw() {
+      ctx.clearRect(0, 0, width, height);
+
+      for(var j = 0; j < 20; j++) {
+        var ball = balls[j];
+
+        ctx.save();
+        ctx.beginPath();
+        ctx.arc(ball.x, ball.y, ball.r, 0, M.PI*2);
+        ctx.closePath();
+        ctx.fill();
+        ctx.restore();
+      }
+
+      for(var m = 0; m < 20; m++) {
+        for(var n = m + 1; n < 20; n++) {
+          var difX = balls[m].x - balls[n].x,
+              difY = balls[m].y - balls[n].y,
+              distance = MP(MP(difX, 2) + MP(difY, 2), 0.5);
+
+          if (distance < 150) {
+            ctx.save();
+            ctx.beginPath();
+            ctx.moveTo(balls[m].x, balls[m].y);
+            ctx.lineTo(balls[n].x, balls[n].y);
+            ctx.closePath();
+            ctx.stroke();
+            ctx.restore();
+          }
+        }
+      }
+    }
+
+    function move() {
+      for(var k = 0; k < 20; k++) {
+        var ball = balls[k];
+
+        ball.x += ball.sx;
+        ball.y += ball.sy;
+
+        if (ball.x < -ball.r) {
+          ball.x = 1200 + ball.r;
+        } else if(ball.x > 1200 + ball.r) {
+          ball.x = -ball.r;
+        }
+
+        if (ball.y < -ball.r) {
+          ball.y = 800 + ball.r;
+        } else if(ball.y > 800 + ball.r) {
+          ball.y = -ball.r;
+        }
+      }
+    }
+
+    initBalls();
+    console.log(balls);
+    draw();
+
+    setInterval(function(){
+      move();
+      draw();
+    }, 1000/60)
+
+  </script>
+</body>
+</html>

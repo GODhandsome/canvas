@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style>
+		*{margin:0;padding: 0}
+		#clock{margin: 100px;}
+	</style>
+</head>
+<body>
+	<canvas id="clock" weith="300px" height="300px"></canvas>
+	<script>
+		var cc = document.getElementById("clock");
+		var cas = cc.getContext("2d");
+
+
+		function draw(){
+			cas.clearRect(0,0,300,300);
+			//time
+			var time = new Date(),
+				hour = time.getHours(),
+				minute = time.getMinutes(),
+				second = time.getSeconds();
+
+			
+			//表盘
+			cas.beginPath();
+			cas.strokeStyle="red";
+			cas.lineWidth=3;
+			cas.arc(150,150,147,0,2*Math.PI,false);
+			cas.stroke();
+			cas.closePath();
+
+			//刻度
+			for(let i=0;i<60;i++){
+				cas.save();
+				cas.beginPath();
+				cas.strokeStyle="black";
+				cas.lineWidth=3;
+				cas.translate(150,150);
+				cas.rotate(6*i*Math.PI/180);
+				cas.moveTo(137,0);
+				cas.lineTo(147,0)			
+				cas.stroke();
+				cas.closePath();
+				cas.restore();
+			}
+
+			for(let i=0;i<12;i++){
+				cas.save();
+				cas.beginPath();
+				cas.strokeStyle="blue";
+				cas.lineWidth=5;
+				cas.translate(150,150);
+				cas.rotate(30*i*Math.PI/180);
+				cas.moveTo(130,0);
+				cas.lineTo(147,0);
+				cas.stroke();
+				cas.closePath();
+				cas.restore();
+			}
+			hour = hour>12?hour-12:hour;
+			
+			//指针
+			cas.save();
+			cas.beginPath();
+			cas.strokeStyle="black";
+			cas.lineWidth=3;
+			cas.translate(150,150);
+			cas.rotate(-1*Math.PI/2);
+			cas.rotate(hour*30*Math.PI/180);
+			cas.moveTo(0,0);
+			cas.lineTo(90,0);
+			cas.stroke();
+			cas.closePath();
+			cas.restore();
+
+
+			cas.save();
+			cas.beginPath();
+			cas.strokeStyle="black";
+			cas.lineWidth=3;
+			cas.translate(150,150);
+			cas.rotate(-1*Math.PI/2);
+			cas.rotate(minute*6*Math.PI/180);
+			cas.moveTo(0,0);
+			cas.lineTo(110,0);
+			cas.stroke();
+			cas.closePath();
+			cas.restore();
+
+			cas.save();
+			cas.beginPath();
+			cas.strokeStyle="green";
+			cas.lineWidth=2;
+			cas.translate(150,150);
+			cas.rotate(-1*Math.PI/2);
+			cas.rotate(second*6*Math.PI/180);
+			cas.moveTo(0,0);
+			cas.lineTo(130,0);
+			cas.stroke();
+			cas.closePath();
+			cas.restore();
+
+
+		
+		}
+		setInterval(draw,1000);
+	</script>
+</body>
+</html>
