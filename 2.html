@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style>
+		*{margin: 0;padding: 0;}
+		#cvs{display: block;margin: 0 auto;border:1px solid;}
+	</style>
+</head>
+<body>
+	<canvas id="cvs" width="400px" height="400px" ></canvas>
+</body>
+<script>
+	var cvs = document.getElementById("cvs");
+	ctx = cvs.getContext("2d");
+
+	var arr=[
+	{x:100,y:100,r:70},
+	{x:250,y:100,r:50},
+	{x:100,y:250,r:50},
+	{x:250,y:300,r:100}
+	]
+	var colors=["red","hotpink","yellow","blue"];
+	var colors2=["blue","red","hotpink","yellow"];
+	function draw(obj,color){
+		ctx.beginPath();
+		ctx.fillStyle = color;
+		ctx.arc(obj.x,obj.y,obj.r,0,Math.PI*2);
+		ctx.fill();
+	}
+	for(var i=0,len=arr.length;i<len;i++){
+		draw(arr[i],"black");
+	}
+
+	cvs.addEventListener("click",function(e){
+		var tt = cvs.getBoundingClientRect();
+		var left = e.clientX - tt.left;
+		var top = e.clientY-tt.top;
+	
+		for(var i=0,len=arr.length;i<len;i++){
+			var cc = arr[i];
+			var pp = "black";			
+			var ww = Math.sqrt(Math.pow(left-cc.x,2)+Math.pow(top-cc.y,2));
+			if(ww<=cc.r){
+				pp = colors[i];
+			}
+			draw(cc,pp);
+		}
+	});
+
+
+	cvs.addEventListener("mousemove",function(e){
+		var tt = cvs.getBoundingClientRect();
+		var left = e.clientX-tt.left;
+		var top = e.clientY-tt.top;
+		for(var i=0,len=arr.length;i<len;i++){
+			var cc = arr[i];
+			var pp ="black";
+			var ww= Math.sqrt(Math.pow(left-cc.x,2)+Math.pow(top-cc.y,2));
+			if(ww<=cc.r){
+				pp = colors2[i];
+				
+			}
+			draw(cc,pp);
+		}
+	});
+
+</script>
+</html>
